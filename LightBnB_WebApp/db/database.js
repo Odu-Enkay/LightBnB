@@ -57,8 +57,7 @@ const getUserWithId = function (id) {
  */
 const addUser = function (user) {
   return pool
-  .query(`INSERT INTO users(id, name, email, password) 
-    VALUES(200, 'Chidan Omairo', 'chaidan@gmail.com', ''$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.' )`, [user])
+  .query(`INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING *;`, [user.name, user.email, user.password])
   .then((result) => {
     console.log(result.rows, 'creating user');
     return result.rows;
