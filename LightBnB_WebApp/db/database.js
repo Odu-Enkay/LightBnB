@@ -38,7 +38,15 @@ const getUserWithEmail = function (email) {
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithId = function (id) {
-  
+  return pool
+    .query(`SELECT * FROM users WHERE id = $1`, [id])
+    .then((result) => {
+      console.log(result.rows, '---------');
+      return result.rows[0];
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
  
 };
 
@@ -48,10 +56,16 @@ const getUserWithId = function (id) {
  * @return {Promise<{}>} A promise to the user.
  */
 const addUser = function (user) {
-  const userId = Object.keys(users).length + 1;
-  user.id = userId;
-  users[userId] = user;
-  return Promise.resolve(user);
+  return pool
+  .query(`INSERT INTO users(id, name, email, password) 
+    VALUES(200, 'Chidan Omairo', 'chaidan@gmail.com', ''$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.' )`, [user])
+  .then((result) => {
+    console.log(result.rows, 'creating user');
+    return result.rows;
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
 };
 
 /// Reservations
