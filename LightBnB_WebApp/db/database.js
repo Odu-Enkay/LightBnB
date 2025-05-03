@@ -10,7 +10,7 @@ const pool = new Pool({
   database: "lightbnb",
 });
 // the following assumes that you named your connection variable `pool`
-pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => {console.log(response)})
+//pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => {console.log(response)})
 
 /// Users
 
@@ -20,8 +20,17 @@ pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => {console.l
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithEmail = function (email) {
-  return Promise.resolve(resolvedUser);
-};
+  return pool
+    .query(`SELECT * FROM users WHERE email = $1`, [email])
+    .then((result) => {
+      console.log(result.rows, '---------');
+      return result.rows[0];
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+ //return Promise.resolve(resolvedUser);
+}; //getUserWithEmail('sebastianguerra@ymail.com');
 
 /**
  * Get a single user from the database given their id.
@@ -29,17 +38,8 @@ const getUserWithEmail = function (email) {
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithId = function (id) {
-  const getAllProperties = (options, limit = 10) => {
-    pool
-      .query(`SELECT * FROM properties LIMIT $1`, [limit])
-      .then((result) => {
-        console.log(result.rows);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  };
-  return Promise.resolve(users[id]);
+  
+ 
 };
 
 /**
